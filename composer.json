@@ -1,0 +1,18 @@
+{
+  "description": "REST Server for the CodeIgniter framework",
+  "name": "chriskacerguis/codeigniter-restserver",
+  "type": "project",
+  "homepage": "https://github.com/chriskacerguis/codeigniter-restserver",
+  "license": "MIT",
+  "support": {
+    "source": "https://github.com/chriskacerguis/codeigniter-restserver"
+  },
+  "require": {
+    "doctrine/orm": "v2.5.6",
+    "symfony/yaml": "^3.2"
+  },
+  "require-dev": {
+    "mysql-workbench-schema-exporter/mysql-workbench-schema-exporter": "^3.0",
+    "mysql-workbench-schema-exporter/doctrine2-exporter": "^3.0"
+  }
+}
