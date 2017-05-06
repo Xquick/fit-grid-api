@@ -21,12 +21,15 @@ class MyGenerator
     {
         $this->doctrine = new Doctrine();
         $this->em = $this->doctrine->em;
+
+        date_default_timezone_set('Europe/Prague');
     }
 
     function generate()
     {
         $this->generateExercises();
         $this->generateWorkouts();
+        $this->generateSchedule();
     }
 
     function generateExercises()
@@ -80,6 +83,11 @@ class MyGenerator
     function generateWorkouts()
     {
         $workout = new \Entity\Workout();
+        $user = new \Entity\User();
+
+        $user->setFirstName('Adam');
+        $user->setLastName('Mrazek');
+        $user->setNickname('adamsfit');
 
         /***
          * @var \Entity\Exercise $exercise
@@ -90,42 +98,68 @@ class MyGenerator
         $exercise = $this->em->getRepository(EXERCISE)->findOneBy(array('name' => 'chinups'));
         $workout->addExercise($exercise);
         $workout->setName('my first workout');
-
         $this->em->persist($workout);
-        $this->em->flush();
-    }
 
-    function generateUsers()
-    {
-        $user = new \Entity\User();
-        $user->setFirstName('Adam');
-        $user->setLastName('Mrázek');
-        $user->setNickname('adamsfit');
+        $user->addWorkout($workout);
+        $workout->addUser($user);
 
         $this->em->persist($user);
         $this->em->flush();
     }
+
 
     function generateSchedule()
     {
         /***
          * @var \Entity\User $user
          */
-        $user = $this->em->getRepository(USER)->findBy(array('nickname' => 'adamsfit'));
-
-        $workoutArr = $user->getWorkouts();
-
+        $user = $this->em->getRepository(USER)->findOneBy(array('nickname' => 'adamsfit'));
+        $workoutCollection = $user->getWorkouts();
         /***
          * @var \Entity\Workout $workout
          */
-        $workout = $workoutArr[0];
+        $workout = $workoutCollection->first();
 
-        $schedule = new \Entity\WorkoutSchedule();
-        $schedule->
+        $exerciseList = $workout->getExercises();
 
-//        $user->addExerciseSchedule();
+        $workoutSchedule = new \Entity\WorkoutSchedule();
+        $workoutSchedule->setWorkout($workout);
+        $workoutSchedule->setUser($user);
+        $workoutSchedule->setDate(new \DateTime('22-07-2017'));
+
+
+        /***
+         * @var \Entity\Exercise $exercise
+         */
+        foreach ($exerciseList as $exercise) {
+            $workoutScheduleExercise = new \Entity\WorkoutScheduleExercise();
+            $workoutScheduleExercise->setWorkoutSchedule($workoutSchedule);
+            $workoutScheduleExercise->setExercise($exercise);
+
+            $set = new \Entity\SetScheduled();
+            $set->setWorkoutScheduleExercise($workoutScheduleExercise);
+            $set->setSetNumber(1);
+            $set->setRepCount(10);
+            $set->setWeight(100);
+            $this->em->persist($set);
+
+            $set = new \Entity\SetScheduled();
+            $set->setWorkoutScheduleExercise($workoutScheduleExercise);
+            $set->setSetNumber(2);
+            $set->setRepCount(8);
+            $set->setWeight(80);
+            $this->em->persist($set);
+            $this->em->persist($workoutScheduleExercise);
+
+        }
+//        \Doctrine\Common\Util\Debug::dump($workoutScheduleExercise);
+
+        $workoutSchedule->addWorkoutScheduleExercise($workoutScheduleExercise);
+
+        $this->em->persist($workoutSchedule);
+        $this->em->flush();
+
     }
-
 }
 
 function generate()

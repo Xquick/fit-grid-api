@@ -5,7 +5,7 @@
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 
-require_once APPPATH.'/../vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
 class Doctrine
 {
@@ -27,4 +27,3 @@ class Doctrine
         $this->em = EntityManager::create($conn, $config);
     }
 }
-
