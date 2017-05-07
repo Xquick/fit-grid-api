@@ -3,7 +3,7 @@
 require FCPATH . 'application/libraries/REST_Controller.php';
 require_once FCPATH . 'application/entity/autoload.php';
 
-class Exercises extends REST_Controller
+class Exercise_Api extends REST_Controller
 {
 
     /**
@@ -32,20 +32,26 @@ class Exercises extends REST_Controller
 
     }
 
-    public function exercises_get()
+    public function index_get()
     {
         $id = $this->get('id');
 
-        /**
-         * @var Entity\Exercise $exercise
-         */
-        $exercise = $this->em->getRepository('Entity\Exercise')->find($id);
+        if (!isset($id)) {
+            $allExercises = $this->em->getRepository(EXERCISE)->findAll();
+            $this->set_response(convertToResponseArray($allExercises), REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+        } else {
+            /**
+             * @var Entity\Exercise $exercise
+             */
+            $exercise = $this->em->getRepository(EXERCISE)->find($id);
 
-        $response = convertToResponseArray($exercise, $exercise->__sleep());
-        $this->set_response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+            $response = convertToResponseArray([$exercise]);
+            $this->set_response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+        }
+
     }
 
-    public function exercises_post()
+    public function index_post()
     {
         $name = $this->post('name');
         $type = $this->post('type');
