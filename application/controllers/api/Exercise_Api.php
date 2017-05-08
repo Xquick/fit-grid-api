@@ -27,25 +27,22 @@ class Exercise_Api extends REST_Controller
         $this->methods['exercises_delete']['limit'] = 50; // 50 requests per hour per user/key
     }
 
-    public function test_get()
-    {
-
-    }
-
     public function index_get()
     {
         $id = $this->get('id');
 
+        $response = [];
         if (!isset($id)) {
-            $allExercises = $this->em->getRepository(EXERCISE)->findAll();
-            $this->set_response(convertToResponseArray($allExercises), REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+            $exercises = $this->em->getRepository(EXERCISE)->findAll();
+            $response['exercises'] = convertToResponseArray($exercises);
+            $this->set_response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
         } else {
             /**
              * @var Entity\Exercise $exercise
              */
-            $exercise = $this->em->getRepository(EXERCISE)->find($id);
 
-            $response = convertToResponseArray([$exercise]);
+            $exercise = $this->em->getRepository(EXERCISE)->find($id);
+            $response['exercises'] = convertToResponseArray([$exercise]);
             $this->set_response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
         }
 
