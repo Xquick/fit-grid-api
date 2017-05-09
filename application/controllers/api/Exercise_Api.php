@@ -34,7 +34,7 @@ class Exercise_Api extends REST_Controller
         $response = [];
         if (!isset($id)) {
             $exercises = $this->em->getRepository(EXERCISE)->findAll();
-            $response['exercises'] = convertToResponseArray($exercises);
+            $response['exerciseList'] = convertToResponseArray($exercises);
             $this->set_response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
         } else {
             /**
@@ -42,7 +42,7 @@ class Exercise_Api extends REST_Controller
              */
 
             $exercise = $this->em->getRepository(EXERCISE)->find($id);
-            $response['exercises'] = convertToResponseArray([$exercise]);
+            $response['exerciseList'] = convertToResponseArray([$exercise]);
             $this->set_response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
         }
 

@@ -83,7 +83,7 @@ class User_Api extends REST_Controller
             array_push($response, [
                 'id' => $workout->getId(),
                 'name' => $workout->getName(),
-                'exercises' => convertToResponseArray($exercises)
+                'exerciseList' => convertToResponseArray($exercises)
             ]);
         }
 
@@ -126,13 +126,13 @@ class User_Api extends REST_Controller
                 $workout_schedule_exercises = $workout_schedule->getWorkoutScheduleExercises();
 
                 $returnSchedule['date'] = $workout_schedule->getDate()->format('d.m.Y');
-                $returnSchedule['exercises'] = [];
+                $returnSchedule['exerciseList'] = [];
 
                 foreach ($workout_schedule_exercises as $workout_schedule_exercise) {
                     $returnScheduleExercise = getAllClassAttributes($workout_schedule_exercise->getExercise());
-                    $returnScheduleExercise['sets'] = convertToResponseArray($workout_schedule_exercise->getSetScheduleds()->toArray());
+                    $returnScheduleExercise['setList'] = convertToResponseArray($workout_schedule_exercise->getSetScheduleds()->toArray());
 
-                    array_push($returnSchedule['exercises'], $returnScheduleExercise);
+                    array_push($returnSchedule['exerciseList'], $returnScheduleExercise);
                 }
                 array_push($returnWorkout['schedule'], $returnSchedule);
             }
