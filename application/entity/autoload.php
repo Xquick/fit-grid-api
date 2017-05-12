@@ -12,6 +12,7 @@ require_once 'Workout.php';
 require_once 'WorkoutSchedule.php';
 require_once 'WorkoutScheduleExercise.php';
 require_once 'SetScheduled.php';
+require_once 'Plan.php';
 
 define('EXERCISE','Entity\Exercise');
 define('USER','Entity\User');
@@ -19,3 +20,4 @@ define('WORKOUT','Entity\Workout');
 define('WORKOUT_SCHEDULE','Entity\WorkoutSchedule');
 define('WORKOUT_SCHEDULE_EXERCISE','Entity\WorkoutScheduleExercise');
 define('SCHEDULED_SET','Entity\SetScheduled');
+define('PLAN','Entity\Plan');
